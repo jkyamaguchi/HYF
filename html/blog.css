@@ -3,28 +3,33 @@
   --max-width: 900px;
   --gutter: 1rem;
   --accent: #0b69ff;
-  --muted: #6b7280;
+  --muted: #494944;
 }
 * {
   box-sizing: border-box;
 }
 body {
-  font-family: system-ui, Arial, sans-serif;
+  font-family: Arial, sans-serif;
   margin: 0;
   color: #0f172a;
   background: #fff;
+  line-height: 1.5;
 }
 
 .header {
-  background: linear-gradient(180deg, rgba(11, 105, 255, 0.03), transparent);
-  padding: 1rem;
+  background: linear-gradient(rgb(250, 165, 75));
+  padding: 0.5rem 1rem;
 }
+
 .header__title {
   margin: 0;
+  padding: 0.5rem 1rem;
   font-size: clamp(1.6rem, 2.6vw, 2rem);
 }
-.header p {
-  margin: 0.5rem 0 0;
+
+.header__subtitle {
+  margin: 0 0 0.2rem 0;
+  padding: 0.5rem 1rem;
   color: var(--muted);
 }
 
