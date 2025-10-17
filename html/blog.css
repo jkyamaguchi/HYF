@@ -9,6 +9,9 @@
   box-sizing: border-box;
 }
 body {
+  display: flex; /* Make the body a flex container, so we can use flex properties on the children elements */
+  flex-direction: column; /* Make the content flow vertically */
+  height: 100vh; /* Make the body the full height of the viewport (can be 100dvh for dynamic heights on mobile vieports) */
   font-family: Arial, sans-serif;
   margin: 0;
   color: #0f172a;
@@ -34,6 +37,7 @@ body {
 }
 
 .main {
+  flex: 1; /* Let the main section of the content extend fully vertically */
   max-width: var(--max-width);
   margin: 0 auto;
   display: grid;
