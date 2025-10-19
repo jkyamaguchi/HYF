@@ -1,61 +1,10 @@
-/* blog.css — styles for blog.html using the class names in the HTML */
-:root {
-  --max-width: 900px;
-  --gutter: 1rem;
-  --accent: #0b69ff;
-  --muted: #494944;
-}
-* {
-  box-sizing: border-box;
-}
-body {
-  display: flex; /* Make the body a flex container, so we can use flex properties on the children elements */
-  flex-direction: column; /* Make the content flow vertically */
-  height: 100vh; /* Make the body the full height of the viewport (can be 100dvh for dynamic heights on mobile vieports) */
-  font-family: Arial, sans-serif;
-  margin: 0;
-  color: #0f172a;
-  background: #fff;
-  line-height: 1.5;
-}
-
-.header {
-  background: linear-gradient(rgb(250, 165, 75));
-  padding: 0.5rem 1rem;
-}
-
-.header__title {
-  margin: 0;
-  padding: 0.5rem 1rem;
-  font-size: clamp(1.6rem, 2.6vw, 2rem);
-}
-
-.header__subtitle {
-  margin: 0 0 0.2rem 0;
-  padding: 0.5rem 1rem;
-  color: var(--muted);
-}
-
-.main {
-  flex: 1; /* Let the main section of the content extend fully vertically */
-  max-width: var(--max-width);
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 300px;
-  gap: var(--gutter);
-  padding: 1rem;
-  align-items: start;
-  /* ensure both main content and aside share the same grid start line */
-  grid-template-rows: auto 1fr;
-}
-
 .section {
-  background: #fff;
-  padding: 1rem;
-  border-radius: 8px;
-  /* Ensure sections sit in the left/main column */
+  /* Ensure all sections sit in the left/main column */
   grid-column: 1 / 2;
+  margin: 0 0 1rem 0;
 }
+
+/* Header is styled globally in basic.css */
 .section__article {
   margin: 0 0 1rem 0;
 }
@@ -63,38 +12,46 @@ body {
   margin: 0 0 0.5rem 0;
   color: var(--accent);
 }
+
 .section__text {
   margin: 0;
 }
 
 .section_list {
   list-style: none;
-  padding: 0;
-  margin: 0;
 }
+
 .section_item {
   padding: 0.4rem 0;
   border-bottom: 1px solid rgba(15, 23, 42, 0.04);
 }
+
 .section_item a {
   text-decoration: none;
   color: inherit;
+}
+
+.main {
+  grid-template-columns: 1fr 300px;
+  gap: 1rem;
+  align-items: start; /* make columns start at same top line */
 }
 
 .aside {
   background: #fbfcff;
   padding: 1rem;
   border-radius: 8px;
-  grid-column: 2 / 3;
-  /* make sure aside starts at the very top, same as first section */
-  grid-row: 1 / 2;
+  grid-column: 2 / 3; /* place aside in the rightmost column */
+  grid-row: 1 / 2; /* ensure it starts at the same row as the first section */
   align-self: start;
-
   position: sticky;
-  top: 0.5rem; /* small space between the sticky aside and the viewport top, but still aligned with 1st section */
-  max-height: 100vh;
+  top: 0.5rem; /* small space between the sticky aside and the viewport top */
+  max-height: calc(100vh - 1rem);
   overflow: auto;
 }
+
+/* Place the first and second .section into the left and middle columns */
+/* remove explicit column placement for individual sections (all use left column) */
 
 .aside__title {
   margin: 0 0 0.5rem 0;

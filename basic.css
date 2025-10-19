@@ -1,0 +1,72 @@
+:root {
+  --container-width: 900px;
+  --page-padding: 1rem;
+  --gap: 0.5rem;
+  --accent: #f55f08;
+  --text: #421e00;
+  --muted: #494944;
+  --gutter: 1rem;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1;
+  display: flex; /* Make the body a flex container, so we can use flex properties on the children elements */
+  flex-direction: column; /* Make the content flow vertically */
+  height: 100vh; /* Make the body the full height of the viewport (can be 100dvh for dynamic heights on mobile viewports) */
+}
+
+.header {
+  background: linear-gradient(rgb(250, 165, 75));
+  padding: 1rem;
+}
+
+.header__title {
+  margin: 0;
+  padding: 0.5rem 1rem;
+  font-size: clamp(1.6rem, 2.6vw, 2rem);
+}
+
+.header__subtitle {
+  margin: 0 0 0.2rem 0;
+  padding: 0.5rem 1rem 1rem;
+  color: var(--muted);
+}
+
+/* Layout: make the about page use the same centered container*/
+.section {
+  max-width: var(--container-width);
+  margin: 1rem auto; /* center horizontally and add a small vertical gap */
+  padding: var(--page-padding);
+  background: #fff; /* ensure readable surface if not already applied */
+}
+
+.section__title {
+  margin: 0 0 0.5rem 0;
+  color: var(--accent);
+}
+
+/* Use a consistent spacing rhythm for paragraphs and lists inside content */
+.section__text,
+.section__ul {
+  margin-bottom: 0.9rem; /* adjust to taste */
+  color: var(--muted);
+}
+
+.main {
+  flex: 1; /* Let the main section of the content extend fully vertically */
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: grid;
+  gap: var(--gutter);
+  padding: 1rem;
+  align-items: start;
+  /* ensure both main content and aside share the same grid start line */
+  grid-template-rows: auto 1fr;
+}

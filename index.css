@@ -1,37 +1,3 @@
-:root {
-  --container-width: 900px;
-  --page-padding: 1rem;
-  --gap: 0.5rem;
-  --accent: #f55f08;
-  --text: #421e00;
-  --muted: #494944;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  line-height: 1.5;
-}
-
-.header {
-  background: linear-gradient(rgb(250, 165, 75));
-  padding: 0.5rem 1rem;
-}
-.header__title {
-  margin: 0;
-  padding: 0.5rem 1rem;
-  font-size: clamp(1.6rem, 2.6vw, 2rem);
-}
-.header__subtitle {
-  margin: 0 0 0.2rem 0;
-  padding: 0.5rem 1rem;
-  color: var(--muted);
-}
-
 .header__nav {
   background: rgb(255, 220, 164);
   margin-left: calc(-1rem); /* cancel out header's left padding */
@@ -42,8 +8,6 @@ body {
 
 .header__list {
   list-style: none; /* Remove default list styling */
-  margin: 0;
-  padding: 0;
   display: flex;
   gap: var(--gap);
   align-items: center;
