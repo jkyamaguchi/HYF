@@ -9,6 +9,75 @@ let totalPairs = 0;
 
 let frontImagePath = "cardFront.jpg";
 
+// Scoreboard functions
+async function loadScores() {
+  try {
+    const response = await fetch("/scores");
+    if (!response.ok) throw new Error("Failed to load scores");
+    const scores = await response.json();
+    return scores;
+  } catch (error) {
+    console.error("Error loading scores:", error);
+    return [];
+  }
+}
+
+async function saveScore(playerName, time, reveals) {
+  try {
+    const response = await fetch("/scores", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: playerName,
+        time: time,
+        reveals: reveals,
+      }),
+    });
+
+    if (!response.ok) throw new Error("Failed to save score");
+    const topScores = await response.json();
+    return topScores;
+  } catch (error) {
+    console.error("Error saving score:", error);
+    return [];
+  }
+}
+
+async function displayScoreboard(elementId = "results-scoreboard-list") {
+  const scores = await loadScores();
+  const scoreboardList = document.getElementById(elementId);
+
+  if (!scoreboardList) return;
+
+  // Clear existing content
+  scoreboardList.innerHTML = "";
+
+  if (scores.length === 0) {
+    const emptyMessage = createElement("div", "empty-scoreboard");
+    emptyMessage.textContent = "No scores yet. Be the first!";
+    scoreboardList.appendChild(emptyMessage);
+    return;
+  }
+
+  scores.forEach((score, index) => {
+    const scoreItem = createElement("div", "score-item");
+
+    const scoreName = createElement("div", "score-name");
+    scoreName.textContent = `${index + 1}. ${score.name}`;
+
+    const scoreTime = createElement("div", "score-time");
+    scoreTime.textContent = `Time: ${formatTimeInMinSec(score.time)}`;
+
+    const scoreReveals = createElement("div", "score-reveals");
+    scoreReveals.textContent = `Reveals: ${score.reveals}`;
+
+    scoreItem.append(scoreName, scoreTime, scoreReveals);
+    scoreboardList.appendChild(scoreItem);
+  });
+}
+
 function createPairs(cardData) {
   return [...cardData, ...cardData];
 }
@@ -17,12 +86,58 @@ function checkWinConditionAndStopTimer() {
   if (matchedPairs === totalPairs) {
     clearInterval(timerInterval);
 
-    setTimeout(() => {
-      const message = `🎉 You won!\nTime: ${formatTimeInMinSec(seconds)}\nReveals: ${revealCount}`;
-      alert(message);
-      resetGame();
+    setTimeout(async () => {
+      await showResultsPage();
     }, 500);
   }
+}
+
+async function showResultsPage() {
+  document.getElementById("game-container").classList.add("hidden");
+  document.getElementById("results-page").classList.remove("hidden");
+
+  document.getElementById("final-time").textContent =
+    formatTimeInMinSec(seconds);
+  document.getElementById("final-reveals").textContent = revealCount;
+
+  await displayScoreboard();
+
+  // Focus on name input
+  document.getElementById("player-name-input").focus();
+}
+
+function handleSaveScore(event) {
+  event.preventDefault();
+
+  const nameInput = document.getElementById("player-name-input");
+  const playerName = nameInput.value.trim();
+
+  if (playerName) {
+    saveScore(playerName, seconds, revealCount).then(() => {
+      displayScoreboard();
+
+      // Disable form after saving
+      nameInput.disabled = true;
+      event.target.querySelector("button").disabled = true;
+      event.target.querySelector("button").textContent = "Saved!";
+    });
+  }
+}
+
+function handlePlayAgain() {
+  document.getElementById("results-page").classList.add("hidden");
+  document.getElementById("game-container").classList.remove("hidden");
+
+  // Reset form
+  const form = document.getElementById("save-score-form");
+  form.reset();
+  const nameInput = document.getElementById("player-name-input");
+  nameInput.disabled = false;
+  const saveButton = form.querySelector("button");
+  saveButton.disabled = false;
+  saveButton.textContent = "Save Score";
+
+  resetGame();
 }
 
 function checkForMatch() {
@@ -185,7 +300,7 @@ async function getGameConfig() {
 }
 
 async function initGame() {
-  frontImagePath = await getGameConfig(); // Fetch once
+  frontImagePath = await getGameConfig();
   const cardData = await getCards();
   const pairedCards = createPairs(cardData);
   totalPairs = cardData.length;
@@ -193,6 +308,14 @@ async function initGame() {
   renderCards();
 }
 
-initGame();
-
+// Setup event listeners
+document
+  .getElementById("save-score-form")
+  .addEventListener("submit", handleSaveScore);
+document
+  .getElementById("play-again-btn")
+  .addEventListener("click", handlePlayAgain);
 document.getElementById("reset-btn").addEventListener("click", resetGame);
+
+// Initialize and start game immediately
+initGame();
